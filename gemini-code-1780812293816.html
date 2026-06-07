@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>KITTY HUB | VAULT</title>
+    <style>
+        :root { --rose: #ff85c1; --bg: #0d0d0d; --panel: #1a1a1a; }
+        body { background: var(--bg); color: var(--rose); font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 20px; }
+        .vault-card { width: 100%; max-width: 500px; background: var(--panel); border: 2px solid var(--rose); border-radius: 12px; padding: 20px; box-shadow: 0 0 20px rgba(255, 133, 193, 0.3); }
+        h2 { text-align: center; text-transform: uppercase; letter-spacing: 3px; }
+        textarea { width: 100%; height: 200px; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; padding: 10px; box-sizing: border-box; resize: vertical; }
+        .controls { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        button { padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-save { background: var(--rose); color: black; }
+        .btn-copy { background: #333; color: var(--rose); border: 1px solid var(--rose); }
+        .input-key { background: #000; color: var(--rose); border: 1px solid var(--rose); padding: 8px; border-radius: 4px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="vault-card">
+    <h2>KITTY HUB VAULT</h2>
+    <textarea id="scriptArea" placeholder="-- Pega tu script aquí..."></textarea>
+    
+    <div class="controls">
+        <label><input type="checkbox" id="keyToggle" onclick="toggleKey()"> Proteger con Key</label>
+        <input type="text" id="creatorKey" class="input-key" placeholder="Define la llave de acceso">
+        <button class="btn-save" onclick="processAndSave()">GENERAR SCRIPT PROTEGIDO</button>
+        <button class="btn-copy" onclick="copyResult()">COPIAR AL PORTAPAPELES</button>
+    </div>
+
+    <div id="outputContainer" style="margin-top:15px; display:none; border: 1px dashed var(--rose); padding: 10px; font-size: 0.8rem;">
+        ID de acceso generado: <span id="linkResult"></span>
+    </div>
+</div>
+
+<script>
+    // --- SEGURIDAD ESTABLE ---
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // --- LÓGICA DE INTERFAZ ---
+    function toggleKey() {
+        document.getElementById('creatorKey').style.display = document.getElementById('keyToggle').checked ? 'block' : 'none';
+    }
+
+    function processAndSave() {
+        let script = document.getElementById('scriptArea').value;
+        const useKey = document.getElementById('keyToggle').checked;
+        const key = document.getElementById('creatorKey').value;
+
+        if (useKey) {
+            // Inyecta el código de seguridad
+            const protection = `--[[ KITTY HUB PROTECTED ]]\nlocal KEY = "${key}";\nlocal input = prompt("Introduce tu Key:");\nif input ~= KEY then game.Players.LocalPlayer:Kick("Key Inválida") return end\n\n`;
+            script = protection + script;
+        }
+
+        // Codifica a Base64 para ocultar el código fuente
+        const finalScript = btoa(script);
+        document.getElementById('scriptArea').value = `loadstring(game:HttpGet("data:text/plain;base64,${finalScript}"))();`;
+        
+        document.getElementById('outputContainer').style.display = 'block';
+        document.getElementById('linkResult').innerText = "ID-" + Math.random().toString(36).substr(2, 9);
+    }
+
+    function copyResult() {
+        const area = document.getElementById('scriptArea');
+        area.select();
+        document.execCommand('copy');
+        alert("Script protegido copiado.");
+    }
+</script>
+
+</body>
+</html>
