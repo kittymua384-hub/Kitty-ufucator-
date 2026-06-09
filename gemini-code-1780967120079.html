@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitty Hub X</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Estilos generales */
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{ background:#05050a; color:white; font-family:'Poppins',sans-serif; min-height:100vh; overflow-x:hidden; background-image: linear-gradient(rgba(255,79,163,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,79,163,.05) 1px, transparent 1px); background-size:40px 40px; }
+
+/* Popup styles */
+.overlay{ position:fixed; inset:0; background:rgba(0,0,0,.8); backdrop-filter:blur(12px); display:flex; justify-content:center; align-items:center; z-index:999999; }
+.alert-box{ width:90%; max-width:450px; background:#0d111b; border:1px solid rgba(255,79,163,.4); border-radius:25px; padding:30px; text-align:center; box-shadow: 0 0 25px rgba(255,79,163,.3), 0 0 60px rgba(255,79,163,.15); animation:popup .4s ease; }
+.alert-header{ color:#ff4fa3; font-size:.8rem; letter-spacing:5px; margin-bottom:20px; font-family:'Orbitron',sans-serif; }
+.alert-icon{ font-size:4rem; margin-bottom:15px; }
+.alert-title{ font-size:2rem; font-weight:700; color:white; margin-bottom:10px; }
+.alert-text{ color:#b8becd; line-height:1.6; margin-bottom:25px; }
+.alert-box button{ width:100%; padding:15px; border:none; border-radius:15px; background:#ff4fa3; color:white; font-weight:700; cursor:pointer; transition:.3s; box-shadow: 0 0 20px rgba(255,79,163,.4); }
+.alert-box button:hover{ transform:translateY(-2px); box-shadow: 0 0 35px rgba(255,79,163,.6); }
+
+/* Main content styles */
+.container{ width:95%; max-width:850px; margin:auto; padding:40px 20px; }
+.secure{ text-align:center; font-family:'Orbitron',sans-serif; letter-spacing:8px; font-size:.8rem; color:#ff4fa3; margin-bottom:25px; }
+.logo{ font-family:'Orbitron',sans-serif; text-align:center; font-size:clamp(3rem,8vw,5rem); font-weight:900; letter-spacing:4px; }
+.logo span{ color:#ff4fa3; text-shadow: 0 0 10px #ff4fa3, 0 0 25px #ff4fa3, 0 0 50px #ff4fa3; }
+.version{ text-align:center; color:#9ca3af; letter-spacing:5px; margin-top:10px; margin-bottom:35px; font-family:'Orbitron',sans-serif; font-size:.9rem; }
+.panel{ background:rgba(13,17,27,.92); border:1px solid rgba(255,79,163,.3); border-radius:20px; padding:25px; backdrop-filter:blur(15px); box-shadow: 0 0 40px rgba(255,79,163,.15); }
+.label{ font-family:'Orbitron',sans-serif; color:#9ca3af; margin-bottom:15px; letter-spacing:3px; }
+textarea{ width:100%; height:280px; background:#080c14; border:1px solid #ff4fa3; border-radius:15px; padding:15px; color:white; resize:none; font-size:14px; }
+.options{ margin-top:25px; display:flex; flex-direction:column; gap:15px; }
+.main-btn{ width:100%; margin-top:25px; padding:18px; border:none; border-radius:15px; background:#ff4fa3; color:white; font-size:1.1rem; font-family:'Orbitron',sans-serif; font-weight:700; letter-spacing:3px; cursor:pointer; box-shadow: 0 0 25px rgba(255,79,163,.45); transition:.3s; }
+.ofuscator-btn{ background:#151b27; border:1px solid #ff4fa3; color:#ff4fa3; margin-top:10px; }
+.main-btn:hover, .ofuscator-btn:hover{ transform:translateY(-2px); }
+.tools{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:15px; }
+.tool-btn{ padding:12px; border:none; border-radius:12px; background:#151b27; color:white; cursor:pointer; border:1px solid rgba(255,79,163,.2); }
+.link-box{ width:100%; margin-top:15px; padding:14px; border:none; border-radius:12px; background:#080c14; color:white; }
+.status{ margin-top:20px; color:#d1d5db; display:flex; align-items:center; gap:8px; }
+.footer{ margin-top:20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-family:'Orbitron',sans-serif; font-size:.8rem; color:#9ca3af; }
+@keyframes popup{ from{ opacity:0; transform:scale(.85); } to{ opacity:1; transform:scale(1); } }
+</style>
+</head>
+<body>
+
+<div id="kittyAlert" class="overlay">
+    <div class="alert-box">
+        <div class="alert-header">KITTY HUB SECURITY</div>
+        <div class="alert-icon">🐱</div>
+        <div class="alert-title">ACCESO DENEGADO</div>
+        <div class="alert-text">Esta área está protegida por Kitty Hub Security.<br>Solo usuarios autorizados pueden acceder.</div>
+        <button onclick="closeAlert()">CONTINUAR</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="secure">// KITTY • SHARE • MANAGE</div>
+    <h1 class="logo">KITTY <span>HUB X</span></h1>
+    <div class="version">SCRIPT MANAGEMENT SYSTEM</div>
+
+    <div class="panel">
+        <div class="label">// INPUT.SCRIPT</div>
+        <textarea id="script" placeholder="Pega tu script aquí..."></textarea>
+
+        <button class="main-btn" onclick="generateLink()">GENERAR ENLACE</button>
+        <button class="main-btn ofuscator-btn" onclick="ofuscarScript()">OFUSCADOR</button>
+
+        <div class="tools" style="margin-top:20px;">
+            <button class="tool-btn" onclick="previewScript()">👁 Vista previa</button>
+            <button class="tool-btn" onclick="copyLink()">📋 Copiar</button>
+        </div>
+
+        <input id="generatedLink" class="link-box" readonly placeholder="Tu enlace aparecerá aquí">
+        <div class="status">🛡 Kitty Hub Ready</div>
+    </div>
+
+    <div class="footer">
+        <div>● SYSTEM ONLINE</div>
+        <div id="chars">0 CHARS</div>
+    </div>
+</div>
+
+<script>
+    // Popup logic
+    function closeAlert(){ document.getElementById("kittyAlert").style.display="none"; }
+
+    // Main logic
+    const textarea = document.getElementById("script");
+    const chars = document.getElementById("chars");
+    textarea.addEventListener("input",()=>{ chars.textContent = textarea.value.length + " CHARS"; });
+
+    function generateLink(){
+        const id = Math.random().toString(36).substring(2,10);
+        document.getElementById("generatedLink").value = "https://kittyhub.com/script/" + id;
+    }
+
+    function ofuscarScript(){
+        const code = textarea.value;
+        if(!code) return alert("Pega un script primero");
+        // AQUÍ AGREGA TU LÓGICA DE OFUSCACIÓN
+        alert("Ofuscando script...");
+        textarea.value = "// Script Ofuscado:\n" + btoa(code); // Ejemplo simple usando Base64
+    }
+
+    function copyLink(){
+        const input = document.getElementById("generatedLink");
+        navigator.clipboard.writeText(input.value);
+        alert("Enlace copiado");
+    }
+
+    function previewScript(){
+        const code = textarea.value;
+        const win = window.open();
+        win.document.write("<pre style='white-space:pre-wrap;font-family:monospace;padding:20px'>" + code.replace(/</g,"&lt;") + "</pre>");
+    }
+</script>
+
+</body>
+</html>
